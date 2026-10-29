@@ -75,6 +75,7 @@ def show_grid(img, title=None, size=None):
 
 
 p1 = np.zeros((6, 8), np.uint8)
+print("test")
 p1[4, 1] = 200
 p1[0, 6] = 100
 
