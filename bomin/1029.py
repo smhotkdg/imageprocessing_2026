@@ -72,19 +72,10 @@ def show_grid(img, title=None, size=None):
     plt.show()
 
 
-p1 = np.zeros((6, 8), np.uint8)
-# >>> TODO q1
-pass          # 여기에 두 줄을 쓰세요
-# <<< TODO q1
 
-expected = np.zeros((6, 8), np.uint8); expected[4, 1] = 200; expected[0, 6] = 100
-if not p1.any():
-    check('문제 1', None)
-else:
-    check('문제 1', same(p1, expected), hint='(x, y)를 배열에서는 [y, x]로 씁니다.')
-    show_grid(p1, 'my answer')
-    
 tiny = np.zeros((6,8),np.uint8)
 print('tiny.shape =', tiny.shape, '(높이, 넓이)')
 tiny[2,5] = 255
+tiny[4,1] = 200
+tiny[0,6] = 100
 show_grid(tiny, 'tiny[2,5] = 255')
