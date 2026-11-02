@@ -3,11 +3,13 @@ import numpy as np
 
 tiny = np.zeros((6,8), np.uint8)
 print('tiny.shape = ', tiny.shape, ' (높이, 너비)')
-tiny[2,5] = 255
-p.show_grid(tiny, 'tiny[2,5] = 255')
+tiny[4,1] = 200
+tiny[0,6] = 100
 
 p1 = np.zeros((6, 8), np.uint8)
 print("test")
+p1[4,1] = 200
+p1[0,6] = 100
 
 
 expected = np.zeros((6, 8), np.uint8); expected[4, 1] = 200; expected[0, 6] = 100
