@@ -91,3 +91,12 @@ ax.plot(100, 200, 'o', color='dodgerblue', ms=9, label='cam[200, 100]  (x=100, y
 ax.legend(loc='lower left', fontsize=8)
 ax.set_title('Same numbers, different pixels')
 plt.tight_layout(); plt.show()
+
+y_row = 150
+row = cam[y_row, :]
+fig, ax = plt.subplots(1, 2, figsize=(11, 3.4))
+ax[0].imshow(cam, cmap='gray', vmin=0, vmax=255); ax[0].axhline(y_row, color='red')
+ax[0].set_title(f'row y = {y_row}'); ax[0].axis('off')
+ax[1].plot(row); ax[1].set(xlabel='x', ylabel='brightness', title=f'cam[{y_row}, :] profile', ylim=(0, 260))
+plt.tight_layout(); plt.show()
+print('이 줄의 길이:', row.shape, '| 평균 밝기:', round(float(row.mean()), 1))
