@@ -92,7 +92,7 @@ ax.legend(loc='lower left', fontsize=8)
 ax.set_title('Same numbers, different pixels')
 plt.tight_layout(); plt.show()
 
-y_row = 150
+y_row = 200
 row = cam[y_row, :]
 row.sort()
 fig, ax = plt.subplots(1, 2, figsize=(11, 3.4))
