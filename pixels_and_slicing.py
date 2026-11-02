@@ -8,6 +8,12 @@ plt.rcParams.update({'figure.dpi': 110, 'font.size': 10})
 print('NumPy :', np.__version__)
 print('OpenCV:', cv2.__version__)
 
+# tiny = np.zeros((6, 8), np.uint8)
+# print('tiny.shape =', tiny.shape, ' (높이, 너비)')
+# tiny[2, 5] = 255          # [행 y=2, 열 x=5]
+# tiny[4, 1] = 200
+# tiny[0, 1] = 100
+# show_grid(tiny, 'tiny[2, 5] = 255')
 
 def check(name, ok, hint=''):
     # 문제 결과를 알려 주는 도우미: None이면 미작성, True면 통과
@@ -70,3 +76,18 @@ def show_grid(img, title=None, size=None):
         ax.set_title(title, pad=28)
     plt.tight_layout()
     plt.show()
+
+
+cam = data.camera()
+H, W = cam.shape
+print('shape:', cam.shape, '| dtype:', cam.dtype, '| 최소', cam.min(), '최대', cam.max())
+print('cam[100, 200] =', cam[100, 200], ' ← y=100, x=200')
+print('cam[200, 100] =', cam[200, 100], ' ← y=200, x=100')
+
+fig, ax = plt.subplots(figsize=(5, 5))
+ax.imshow(cam, cmap='gray', vmin=0, vmax=255)
+ax.plot(200, 100, 'o', color='red', ms=9, label='cam[100, 200]  (x=200, y=100)')
+ax.plot(100, 200, 'o', color='dodgerblue', ms=9, label='cam[200, 100]  (x=100, y=200)')
+ax.legend(loc='lower left', fontsize=8)
+ax.set_title('Same numbers, different pixels')
+plt.tight_layout(); plt.show()
