@@ -8,6 +8,12 @@ plt.rcParams.update({'figure.dpi': 110, 'font.size': 10})
 print('NumPy :', np.__version__)
 print('OpenCV:', cv2.__version__)
 
+# tiny = np.zeros((6, 8), np.uint8)
+# print('tiny.shape =', tiny.shape, ' (높이, 너비)')
+# tiny[2, 5] = 255          # [행 y=2, 열 x=5]
+# tiny[4, 1] = 200
+# tiny[0, 1] = 100
+# show_grid(tiny, 'tiny[2, 5] = 255')
 
 def check(name, ok, hint=''):
     # 문제 결과를 알려 주는 도우미: None이면 미작성, True면 통과
@@ -70,3 +76,28 @@ def show_grid(img, title=None, size=None):
         ax.set_title(title, pad=28)
     plt.tight_layout()
     plt.show()
+
+
+cam = data.camera()
+H, W = cam.shape
+print('shape:', cam.shape, '| dtype:', cam.dtype, '| 최소', cam.min(), '최대', cam.max())
+print('cam[100, 200] =', cam[100, 200], ' ← y=100, x=200')
+print('cam[200, 100] =', cam[200, 100], ' ← y=200, x=100')
+
+fig, ax = plt.subplots(figsize=(5, 5))
+ax.imshow(cam, cmap='gray', vmin=0, vmax=255)
+ax.plot(200, 100, 'o', color='red', ms=9, label='cam[100, 200]  (x=200, y=100)')
+ax.plot(100, 200, 'o', color='dodgerblue', ms=9, label='cam[200, 100]  (x=100, y=200)')
+ax.legend(loc='lower left', fontsize=8)
+ax.set_title('Same numbers, different pixels')
+plt.tight_layout(); plt.show()
+
+y_row = 150
+row = cam[y_row, :]
+row.sort()
+fig, ax = plt.subplots(1, 2, figsize=(11, 3.4))
+ax[0].imshow(cam, cmap='gray', vmin=0, vmax=255); ax[0].axhline(y_row, color='red')
+ax[0].set_title(f'row y = {y_row}'); ax[0].axis('off')
+ax[1].plot(row); ax[1].set(xlabel='x', ylabel='brightness', title=f'cam[{y_row}, :] profile', ylim=(0, 260))
+plt.tight_layout(); plt.show()
+print('이 줄의 길이:', row.shape, '| 평균 밝기:', round(float(row.mean()), 1), '| 중앙값 : ', row[256])
