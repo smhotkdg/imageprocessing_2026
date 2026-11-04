@@ -90,3 +90,7 @@ if crop(cam, 0, 0, 1, 1) is None:
 else:
     bad = [t for t in tests if not same(crop(cam, *t), cam[t[1]:t[1] + t[3], t[0]:t[0] + t[2]])]
     check('문제 7', not bad, hint=f'틀린 상자: {bad[:2]}  결과 크기가 (h, w)인지 확인')
+
+show([crop(cam, *t)for t in tests])
+
+show(crop(cam, 410, 115, 25, 90))
