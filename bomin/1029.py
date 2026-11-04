@@ -72,15 +72,14 @@ def show_grid(img, title=None, size=None):
     plt.show()
 
 
-p1 = np.zeros((6, 8), np.uint8)
-print("test")
-p1[4, 1] = 200
-p1[0, 6] = 100
+def crop(img, x, y, w, h):
+    # >>> TODO q7
+    return None
+    # <<< TODO q7
 
-expected = np.zeros((6, 8), np.uint8); expected[4, 1] = 200; expected[0, 6] = 100
-if not p1.any():
-    check('문제 1', None)
+tests = [(150, 60, 130, 140), (0, 0, 10, 20), (500, 400, 12, 112), (250, 130, 80, 60)]
+if crop(cam, 0, 0, 1, 1) is None:
+    check('문제 7', None)
 else:
-    check('문제 1', same(p1, expected), hint='(x, y)를 배열에서는 [y, x]로 씁니다.')
-    show_grid(p1, 'my answer')
-
+    bad = [t for t in tests if not same(crop(cam, *t), cam[t[1]:t[1] + t[3], t[0]:t[0] + t[2]])]
+    check('문제 7', not bad, hint=f'틀린 상자: {bad[:2]}  결과 크기가 (h, w)인지 확인')
