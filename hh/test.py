@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage import data
 
+cam = data.camera()
+
 plt.rcParams.update({'figure.dpi': 110, 'font.size': 10})
 print('NumPy :', np.__version__)
 print('OpenCV:', cv2.__version__)
