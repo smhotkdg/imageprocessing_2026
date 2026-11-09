@@ -80,17 +80,51 @@ def show_grid(img, title=None, size=None):
 def crop(img, x, y, w, h):
     return img[y:y+h, x:x+w]
 
-cam = data.camera()
+astronaut = data.astronaut()
+astronaut_YCrCb = cv2.cvtColor(astronaut, cv2.COLOR_RGB2YCrCb)
+
+face_1 = (200,120)
+face_2 = (225, 90)
+face_3 = (220, 170)
+background = (100, 100)
+cloth = (200, 350)
+
+face_1_reversed = tuple(reversed(face_1))
+face_2_reversed = tuple(reversed(face_2))
+face_3_reversed = tuple(reversed(face_3))
+background_reversed = tuple(reversed(background))
+cloth_reversed = tuple(reversed(cloth))
 
 
+## get color
+face_1_rgb = astronaut[face_1_reversed]
+face_2_rgb = astronaut[face_2_reversed]
+face_3_rgb = astronaut[face_3_reversed]
+background_rgb = astronaut[background_reversed]
+cloth_rgb = astronaut[cloth_reversed]
 
-tests = [(150, 60, 130, 140), (0, 0, 10, 20), (500, 400, 12, 112), (250, 130, 80, 60)]
-if crop(cam, 0, 0, 1, 1) is None:
-    check('문제 7', None)
-else:
-    bad = [t for t in tests if not same(crop(cam, *t), cam[t[1]:t[1] + t[3], t[0]:t[0] + t[2]])]
-    check('문제 7', not bad, hint=f'틀린 상자: {bad[:2]}  결과 크기가 (h, w)인지 확인')
+face_1_YCrCb = astronaut_YCrCb[face_1_reversed]
+face_2_YCrCb = astronaut_YCrCb[face_2_reversed]
+face_3_YCrCb = astronaut_YCrCb[face_3_reversed]
+background_YCrCb = astronaut_YCrCb[background_reversed]
+cloth_YCrCb = astronaut_YCrCb[cloth_reversed]
 
-show([crop(cam, *t)for t in tests])
+print("face_1_rgb : ", face_1_rgb, ", face_1_YCrCb : ", face_1_YCrCb)
+print("face_2_rgb : ", face_2_rgb, ", face_2_YCrCb : ", face_2_YCrCb)
+print("face_3_rgb : ", face_3_rgb, ", face_3_YCrCb : ", face_3_YCrCb)
+print("background_rgb : ", background_rgb, ", background_YCrCb : ", background_YCrCb)
+print("cloth_rgb : ", cloth_rgb, ", cloth_YCrCb : ", cloth_YCrCb)
 
-show(crop(cam, 410, 115, 25, 90))
+## plot image
+
+circle_radius = 5
+circle_color = (0,0,255)
+circle_thickness = 2
+
+processed_image = cv2.circle(astronaut, face_1, circle_radius, circle_color, circle_thickness)
+processed_image = cv2.circle(processed_image, face_2, circle_radius, circle_color, circle_thickness)
+processed_image = cv2.circle(processed_image, face_3, circle_radius, circle_color, circle_thickness)
+processed_image = cv2.circle(processed_image, background, circle_radius, circle_color, circle_thickness)
+processed_image = cv2.circle(processed_image, cloth, circle_radius, circle_color, circle_thickness)
+
+show(processed_image)
