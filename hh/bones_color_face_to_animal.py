@@ -90,5 +90,17 @@ else:
 astro = data.astronaut()
 cat = data.chelsea()
 print('astro:', astro.shape,'|cat', astro.dtype)
+cv2.circle(astro, (100, 100), 3, (0, 255, 0), 1)
+astro[100, 100] = [0, 255, 0] # 우주인 사진에 초록색 점을 찍는다
+print('astro[100, 100]:', astro[100, 100]) # 해상도 알기
+
+cv2.circle(astro, (225, 130), 3, (0, 255, 0), 1)
+astro[225, 130] = [0, 255, 0]
+
+ycc = cv2.cvtColor(astro, cv2.COLOR_RGB2YCrCb) # 컬러 스페이스 변환
+print('astroCbCr[225, 130]:', ycc[225, 130]) 
+
+cv2.circle(astro, (190, 150), 3, (0, 255, 0), 1)
+astro[190, 150] = [0, 255, 0]
 # show(crop(cam, 410, 118, 25, 70))
 show([astro, cat], ['astro', 'cat'], cols=2, size=4)
