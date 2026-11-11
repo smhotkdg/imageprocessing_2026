@@ -121,10 +121,18 @@ circle_radius = 5
 circle_color = (0,0,255)
 circle_thickness = 2
 
-processed_image = cv2.circle(astronaut, face_1, circle_radius, circle_color, circle_thickness)
+processed_image = astronaut.copy()
+
+processed_image = cv2.circle(processed_image, face_1, circle_radius, circle_color, circle_thickness)
 processed_image = cv2.circle(processed_image, face_2, circle_radius, circle_color, circle_thickness)
 processed_image = cv2.circle(processed_image, face_3, circle_radius, circle_color, circle_thickness)
 processed_image = cv2.circle(processed_image, background, circle_radius, circle_color, circle_thickness)
 processed_image = cv2.circle(processed_image, cloth, circle_radius, circle_color, circle_thickness)
 
-show(processed_image)
+ycc = cv2.cvtColor(astronaut, cv2.COLOR_RGB2YCrCb)
+Y,Cr,Cb = Y, Cr, Cb = cv2.split(ycc)
+
+book_mask = (Cr >= 133) & (Cr <= 173) & (Cb >= 77) & (Cb <= 127)
+
+ref = cv2.inRange(cv2.cvtColor(astronaut, cv2.COLOR_RGB2YCrCb), (0, 133, 77),(255, 173, 127)) > 0
+show([astronaut, book_mask.astype(np.uint8) * 255]) 
