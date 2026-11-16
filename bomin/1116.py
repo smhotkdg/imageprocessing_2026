@@ -124,14 +124,81 @@ cat = data.chelsea()          # 고양이 사진 (RGB, 300x451)
 print('astro', astro.shape, '| cat', cat.shape)
 astro_temp = astro.copy()
 
+cv2.rectangle(
+    astro_temp,
+    (210, 100),     
+    (250, 140),   
+    (0, 255, 0),   
+    2              
+)
+
+
+astro = data.astronaut()
+cat = data.chelsea()
+
+print('astro', astro.shape, '| cat', cat.shape)
+
+astro_temp = astro.copy()
+
 ycc = cv2.cvtColor(astro, cv2.COLOR_RGB2YCrCb)
-cv2.circle(astro_temp, (225, 130), 3, (0, 255, 0), 1)  
-print('astro[225,130]', astro_temp[225, 130])  
-print('CbCr astro[225,130]', ycc[225, 130])  
+
+#얼굴
+#x1, y1 = 190, 145
+#x2, y2 = 205, 165
+
+#헬멧
+x1, y1 = 380, 430
+x2, y2 = 410, 460
+
+cv2.rectangle(
+    astro_temp,
+    (x1, y1),
+    (x2, y2),
+    (0, 255, 0),
+    2
+)
+
+roi_rgb = astro[y1:y2+1, x1:x2+1]
+roi_ycc = ycc[y1:y2+1, x1:x2+1]
+
+print('RGB MIN:', roi_rgb.min(axis=(0, 1)))
+print('RGB MAX:', roi_rgb.max(axis=(0, 1)))
+
+print('YCrCb MIN:', roi_ycc.min(axis=(0, 1)))
+print('YCrCb MAX:', roi_ycc.max(axis=(0, 1)))
 
 show([astro_temp, cat], ['astronaut', 'chelsea (cat)'], size=4)
 
-ycc = ycc = cv2.cvtColor(astro, cv2.COLOR_RGB2YCrCb)
-Y ,Cr , Cb = [ycc[..., i].astype(float) for i in range(3)]
-book_mask = (Cr >= 133) & (Cr <= 173) & (Cb >= 77) & (Cb <= 127)
+print('RGB [x=225, y=130]:', astro[130, 225])
+print('YCrCb [x=225, y=130]:', ycc[130, 225])
+
+Y, Cr, Cb = [ycc[..., i].astype(float) for i in range(3)]
+
+book_mask = (
+    (Cr >= 133) & (Cr <= 173) &
+    (Cb >= 77) & (Cb <= 127)
+)
+
 show(book_mask.astype(np.uint8) * 255, 'book mask', size=4)
+
+roi_ycc = ycc[y1:y2+1, x1:x2+1]
+
+Cr = roi_ycc[:, :, 1]
+Cb = roi_ycc[:, :, 2]
+
+print('최소 Cr:', Cr.min())
+print('최대 Cr:', Cr.max())
+print('최소 Cb:', Cb.min())
+print('최대 Cb:', Cb.max())
+
+Y, Cr, Cb = cv2.split(ycc)
+
+book_mask = (
+    (Cr >= roi_ycc[:, :, 1].min()) &
+    (Cr <= roi_ycc[:, :, 1].max()) &
+    (Cb >= roi_ycc[:, :, 2].min()) &
+    (Cb <= roi_ycc[:, :, 2].max())
+)
+
+show(book_mask.astype(np.uint8) * 255, 'skin mask', size=4)
+
