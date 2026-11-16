@@ -135,4 +135,66 @@ Y,Cr,Cb = Y, Cr, Cb = cv2.split(ycc)
 book_mask = (Cr >= 133) & (Cr <= 173) & (Cb >= 77) & (Cb <= 127)
 
 ref = cv2.inRange(cv2.cvtColor(astronaut, cv2.COLOR_RGB2YCrCb), (0, 133, 77),(255, 173, 127)) > 0
-show([astronaut, book_mask.astype(np.uint8) * 255]) 
+
+face_start = (200,110)
+face_end = (250,130)
+cloth_start = (50,300)
+cloth_end = (100,400)
+
+face_rectangle_color = (0,0,255)
+face_rectangle_thickness = 2
+
+cloth_rectangle_color = (255,0,0)
+cloth_rectangle_thickness = 2
+
+roi_image = astronaut.copy()
+roi_image = cv2.rectangle(roi_image, face_start, face_end, face_rectangle_color, face_rectangle_thickness)
+roi_image = cv2.rectangle(roi_image, cloth_start, cloth_end, cloth_rectangle_color, cloth_rectangle_thickness)
+
+
+face_x1, face_x2 = sorted([face_start[0], face_end[0]])
+face_y1, face_y2 = sorted([face_start[1], face_end[1]])
+
+cropped_face_image = astronaut[face_y1:face_y2, face_x1:face_x2]
+
+cloth_x1, cloth_x2 = sorted([cloth_start[0], cloth_end[0]])
+cloth_y1, cloth_y2 = sorted([cloth_start[1], cloth_end[1]])
+
+cropped_cloth_image = astronaut[cloth_y1:cloth_y2, cloth_x1:cloth_x2]
+
+face_ycc = cv2.cvtColor(cropped_face_image, cv2.COLOR_RGB2YCrCb)
+face_Y, face_Cr, face_Cb = cv2.split(face_ycc)
+
+cloth_ycc = cv2.cvtColor(cropped_cloth_image, cv2.COLOR_RGB2YCrCb)
+cloth_Y, cloth_Cr, cloth_Cb = cv2.split(cloth_ycc)
+
+
+face_Cr_min = np.min(face_Cr)
+face_Cr_max = np.max(face_Cr)
+face_Cb_min = np.min(face_Cb)
+face_Cb_max = np.max(face_Cb)
+
+print()
+print("face information")
+print("min Cr : ", face_Cr_min, "max Cr : ", face_Cr_max)
+print("min Cb : ", face_Cb_min, "max Cb : ", face_Cb_max)
+
+cloth_Cr_min = np.min(cloth_Cr)
+cloth_Cr_max = np.max(cloth_Cr)
+cloth_Cb_min = np.min(cloth_Cb)
+cloth_Cb_max = np.max(cloth_Cb)
+
+print()
+print("cloth information")
+print("min Cr : ", cloth_Cr_min, "max Cr : ", cloth_Cr_max)
+print("min Cb : ", cloth_Cb_min, "max Cb : ", cloth_Cb_max)
+
+# roi value check
+#show((roi_image,cropped_face_image, cropped_cloth_image))
+
+
+face_book_mask = (Cr >= face_Cr_min) & (Cr <= face_Cr_max) & (Cb >= face_Cb_min) & (Cb <= face_Cb_max)
+cloth_book_mask = (Cr >= cloth_Cr_min) & (Cr <= cloth_Cr_max) & (Cb >= cloth_Cb_min) & (Cb <= cloth_Cb_max)
+
+
+show([astronaut, face_book_mask.astype(np.uint8) * 255, cloth_book_mask.astype(np.uint8) * 255]) 
