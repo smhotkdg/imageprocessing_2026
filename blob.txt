@@ -1,0 +1,10 @@
+skin_u8 = (skin if skin is not None else np.zeros(astro.shape[:2], bool)).astype(np.uint8)
+ker = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
+clean = cv2.morphologyEx(skin_u8, cv2.MORPH_OPEN, ker)
+clean = cv2.morphologyEx(clean, cv2.MORPH_CLOSE, ker)
+n_lab, labels, stats, cents = cv2.connectedComponentsWithStats(clean)
+print('덩어리 수(배경 포함):', n_lab)
+print('넓이 상위 5개 [x, y, w, h, area]:')
+for i in (1 + np.argsort(-stats[1:, cv2.CC_STAT_AREA]))[:5]:
+    print('  label', i, stats[i])
+show([skin_u8 * 255, clean * 255, (labels * 37 % 256).astype(np.uint8)], ['skin', 'open + close', 'labels (each blob a gray level)'], size=3.2)
